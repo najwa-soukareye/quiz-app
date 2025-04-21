@@ -22,7 +22,7 @@ body{
 .login-box{
     position: relative;
     width: 400px;
-    height: 450px;
+    min-height: 500px;
     background: transparent;
     border: 4px solid rgb(4, 4, 4);
     border-radius: 20px;
@@ -56,7 +56,7 @@ h2{
 }
 
 .input-box input:focus~label,
-.input-box input:focus~label{
+.input-box input:valid~label{
     top: -5px;
 }
 
@@ -109,5 +109,18 @@ button{
 }
 
 .hidden {
-    display: none;
+    display: none !important;
   }
+
+ 
+.register-box{
+    position: relative;
+    width: 400px;
+    min-height: 500px;
+    background: transparent;
+    border: 4px solid rgb(4, 4, 4);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

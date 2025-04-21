@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="login-box">
-   <form action="" class="hidden">
+   <form action="" >
     <h2>Login</h2>
     <div class="input-box">
         <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
@@ -31,9 +31,40 @@
 </form>
 </div>
 
+<div class="register-box hidden" id="registerForm">
+    <form action="">
+      <h2>Register</h2>
+      <div class="input-box">
+        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+        <input type="text" id="registerUsername" required>
+        <label>Username</label>
+      </div>
+      <div class="input-box">
+        <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+        <input type="email" id="registerEmail" required>
+        <label>Email</label>
+      </div>
+      <div class="input-box">
+        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+        <input type="password" id="registerPassword" required>
+        <label>Password</label>
+      </div>
+      <div class="input-box">
+        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+        <input type="password" id="registerConfirmPassword" required>
+        <label>Confirm Password</label>
+      </div>
+      <button type="submit">Register</button>
+      <div class="register-link">
+        <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+      </div>
+    </form>
+  </div>
   
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="authentication.js"></script>
+<script src="home.js"></script>
 </body>
 </html>
 
