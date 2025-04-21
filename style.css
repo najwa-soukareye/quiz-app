@@ -18,14 +18,23 @@ body{
     background-size: cover;
     background-position: center;
 }
-
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); 
+    z-index: -1; 
+  }
 
 .login-box{
     position: relative;
     width: 400px;
     min-height: 500px;
     background:-moz-radial-gradient();
-    border: 4px solid rgb(4, 4, 4);
+    border: 4px solid rgb(250, 250, 250);
     border-radius: 20px;
     display: flex;
     justify-content: center;
@@ -35,14 +44,14 @@ body{
 h2{
     font-size: 2em;
     text-align: center;
-    color: rgb(7, 7, 7);
+    color: rgb(253, 249, 249);
 }
 
 .input-box{
     position: relative;
     width: 310px;
     margin: 30px 0;
-    border-bottom:2px solid rgb(2, 2, 2);
+    border-bottom:2px solid rgb(241, 239, 239);
 }
 
 .input-box label{
@@ -51,7 +60,7 @@ h2{
     left: 5px;
     transform: translateY(-50%);
     font-size: 1.3em;
-    color:rgb(3, 3, 3) ;
+    color:rgb(245, 239, 239) ;
     pointer-events: none;
     transition: .5s;
 }
@@ -68,14 +77,14 @@ background: transparent;
 border: none;
 outline: none;
 font-size: 1em;
-color: rgb(5, 6, 8);
+color: rgb(240, 241, 244);
 padding: 0 35px 0 5px;
 }
 
 .input-box .icon{
     position: absolute;
     right: 8px;
-    color: rgb(4, 4, 4);
+    color: rgb(249, 247, 247);
     font-size: 1.2em;
     line-height: 57px;
 }
@@ -83,19 +92,19 @@ padding: 0 35px 0 5px;
 button{
     width: 100%;
     height: 40px;
-    background: rgb(0, 0, 1);
+    background: rgb(248, 248, 250);
     border: none;
     outline: none;
     border-radius: 40px;
     cursor: pointer;
     font-size: 1em;
-    color: rgb(232, 235, 240);
+    color: rgb(0, 3, 8);
     font-weight: 700;
 }
 
 .register-link{
     font-size: 1em;
-    color: rgb(1, 1, 1);
+    color: rgb(247, 245, 245);
     text-align: center;
     margin: 25px 0 10px;
 }
@@ -119,7 +128,7 @@ button{
     width: 400px;
     min-height: 500px;
     background: transparent;
-    border: 4px solid rgb(4, 4, 4);
+    border: 4px solid rgb(242, 238, 238);
     border-radius: 20px;
     display: flex;
     justify-content: center;
