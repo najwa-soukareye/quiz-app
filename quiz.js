@@ -1,141 +1,158 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Set welcome message with username if available
-    const welcomeMessage = document.getElementById('welcomeMessage');
-    const username = localStorage.getItem('username');
-    if (username) {
-        welcomeMessage.textContent = `Welcome, ${username}!`;
-    } else {
-        welcomeMessage.textContent = 'Welcome!';
+    const currentUserEmail = localStorage.getItem('currentUserEmail');
+    const urlParams = new URLSearchParams(window.location.search);
+    const quizId = parseInt(urlParams.get('id'));
+    
+   
+    const quizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
+    const quiz = quizzes.find(q => q.id === quizId);
+    
+    if (!quiz) {
+        alert('Quiz not found!');
+        window.location.href = 'index.html';
+        return;
     }
-
-    // Display quizzes from localStorage
-    displayQuizzes();
-
-    function displayQuizzes() {
-        const quizList = document.getElementById('quizList');
-        quizList.innerHTML = ''; 
-
-const quizzes = [
-    {
-      id: 1,
-      title: "General Knowledge",
-      questions: [
-        {
-          question: "What is the capital of France?",
-          options: ["Berlin", "Madrid", "Paris", "Rome"],
-          answer: 2
-        },
-        {
-          question: "How many continents are there?",
-          options: ["5", "6", "7", "8"],
-          answer: 2
-        },
-        {
-          question: "What is H2O?",
-          options: ["Oxygen", "Water", "Hydrogen", "Salt"],
-          answer: 1
-        },
-        {
-          question: "Which animal is known as the King of the Jungle?",
-          options: ["Tiger", "Elephant", "Lion", "Leopard"],
-          answer: 2
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: "History",
-      questions: [
-        {
-          question: "Who was the first President of the United States?",
-          options: ["Abraham Lincoln", "George Washington", "Thomas Jefferson", "John Adams"],
-          answer: 1
-        },
-        {
-          question: "In which year did World War II end?",
-          options: ["1940", "1943", "1945", "1950"],
-          answer: 2
-        },
-        {
-          question: "Which ancient civilization built the pyramids?",
-          options: ["Romans", "Greeks", "Egyptians", "Babylonians"],
-          answer: 2
-        },
-        {
-          question: "What wall divided East and West Berlin?",
-          options: ["The Iron Wall", "The Cold Wall", "The Great Wall", "The Berlin Wall"],
-          answer: 3
-        }
-      ]
-    },
-    {
-      id: 3,
-      title: "Science Fun",
-      questions: [
-        {
-          question: "What planet is known as the Red Planet?",
-          options: ["Earth", "Mars", "Jupiter", "Saturn"],
-          answer: 1
-        },
-        {
-          question: "Which organ pumps blood in the human body?",
-          options: ["Liver", "Brain", "Heart", "Lungs"],
-          answer: 2
-        },
-        {
-          question: "Which gas do plants use to make food?",
-          options: ["Oxygen", "Hydrogen", "Carbon Dioxide", "Nitrogen"],
-          answer: 2
-        },
-        {
-          question: "What do bees make?",
-          options: ["Butter", "Milk", "Honey", "Juice"],
-          answer: 2
-        }
-      ]
-    },
-    {
-      id: 4,
-      title: "Computer Basics",
-      questions: [
-        {
-          question: "What does CPU stand for?",
-          options: ["Central Process Unit", "Central Processing Unit", "Computer Power Unit", "Control Process Unit"],
-          answer: 1
-        },
-        {
-          question: "What does HTML stand for?",
-          options: ["HyperText Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language", "Hyper Tool Machine Language"],
-          answer: 0
-        },
-        {
-          question: "Which of these is an output device?",
-          options: ["Mouse", "Keyboard", "Monitor", "Scanner"],
-          answer: 2
-        },
-        {
-          question: "Which one is a programming language?",
-          options: ["Google", "Python", "Chrome", "Excel"],
-          answer: 1
-        }
-      ]
+    
+  
+    const quizTitle = document.getElementById('quiz-title');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const progressBar = document.getElementById('progress-bar');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const quizContent = document.getElementById('quiz-content');
+    const resultsContainer = document.getElementById('results-container');
+    const scoreElement = document.getElementById('score');
+    const restartBtn = document.getElementById('restart-btn');
+    
+   
+    let currentQuestionIndex = 0;
+    let userAnswers = Array(quiz.questions.length).fill(null);
+    let score = 0;
+    
+    quizTitle.textContent = quiz.title;
+    showQuestion();
+    updateProgressBar();
+    updateNavigationButtons();
+    
+    prevBtn.addEventListener('click', goToPreviousQuestion);
+    nextBtn.addEventListener('click', goToNextQuestion);
+    restartBtn.addEventListener('click', restartQuiz);
+    
+    function showQuestion() {
+        const question = quiz.questions[currentQuestionIndex];
+        questionText.textContent = question.question;
+        
+        optionsContainer.innerHTML = '';
+        question.options.forEach((option, index) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+            if (userAnswers[currentQuestionIndex] === index) {
+                optionElement.classList.add('selected');
+            }
+            optionElement.textContent = option;
+            optionElement.addEventListener('click', () => selectOption(index));
+            optionsContainer.appendChild(optionElement);
+        });
     }
-  ];
-  
-  // Save updated quizzes to localStorage
-  localStorage.setItem("quizzes", JSON.stringify(quizzes));
-  
-  quizzes.forEach((quiz, index) => {
-    const quizCard = document.createElement('div');
-    quizCard.className = 'quiz-card';
-    quizCard.style.animationDelay = `${index * 0.1}s`;
-    quizCard.innerHTML = `
-        <div class="icon-container">📝</div>
-        <h3>${quiz.title}</h3>
-        <p>${quiz.description}</p>
-        <a href="quiz.html?id=${quiz.id}" class="btn">Start Quiz</a>
-    `;
-    quizList.appendChild(quizCard);
-});
-}
+    
+    function selectOption(optionIndex) {
+        document.querySelectorAll('.option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        event.target.classList.add('selected');
+        userAnswers[currentQuestionIndex] = optionIndex;
+    }
+    
+    function updateProgressBar() {
+        const progress = ((currentQuestionIndex  ) / quiz.questions.length  ) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
+    
+    function updateNavigationButtons() {
+        prevBtn.disabled = currentQuestionIndex === 0;
+        
+        if (currentQuestionIndex === quiz.questions.length -1) {
+            nextBtn.textContent = 'Finish';
+        } else {
+            nextBtn.textContent = 'Next';
+        }
+    }
+    
+    function goToPreviousQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            showQuestion();
+            updateProgressBar();
+            updateNavigationButtons();
+        }
+    }
+    
+    function goToNextQuestion() {
+        if (userAnswers[currentQuestionIndex] === null && currentQuestionIndex !== quiz.questions.length - 1) {
+            alert('Please select an answer!');
+            return;
+        }
+        
+        if (currentQuestionIndex < quiz.questions.length - 1) {
+            currentQuestionIndex++;
+            showQuestion();
+            updateProgressBar();
+            updateNavigationButtons();
+        } else {
+            calculateScore();
+            saveQuizResult();
+            progressBar.style.width = '100%';
+            quizContent.style.display = 'none';
+            resultsContainer.style.display = 'block';
+        }
+    }
+    
+    function saveQuizResult() {
+        const email = localStorage.getItem('currentUserEmail');
+        if (!email) return;
+        
+        const quizResults = JSON.parse(localStorage.getItem('quizResults')) || {};
+        const userResults = quizResults[email] || [];
+        
+        userResults.push({
+            quizId: quiz.id,
+            quizTitle: quiz.title,
+            score: (score / quiz.questions.length) * 100,
+            date: new Date().toISOString().split('T')[0]
+        });
+        
+        quizResults[email] = userResults;
+        localStorage.setItem('quizResults', JSON.stringify(quizResults));
+        
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const userIndex = users.findIndex(u => u.email === email);
+        if (userIndex !== -1) {
+            users[userIndex].lastActive = new Date().toISOString().split('T')[0];
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+    }
+    function calculateScore() {
+        score = 0;
+        quiz.questions.forEach((question, index) => {
+            if (userAnswers[index] === question.answer) {
+                score++;
+            }
+        });
+        saveQuizResult();
+        scoreElement.textContent = `You scored ${score} out of ${quiz.questions.length}`;
+    }
+    
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        userAnswers = Array(quiz.questions.length).fill(null);
+        score = 0;
+        
+        quizContent.style.display = 'block';
+        resultsContainer.style.display = 'none';
+        
+        showQuestion();
+        updateProgressBar();
+        updateNavigationButtons();
+    }
 });

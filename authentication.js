@@ -34,14 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
         let users = JSON.parse(localStorage.getItem("users")) || [];
     
-        // Check if user already exists
+    
         if (users.some(user => user.email === email)) {
           alert("User with this email already exists!");
           return;
         }
-    
-        // Add new user
+  
         users.push({ username, email, password });
+        localStorage.setItem('username', username);
+        localStorage.setItem('currentUserEmail', email);
         localStorage.setItem("users", JSON.stringify(users));
     
         alert("Registration successful! You can now log in.");
@@ -49,35 +50,27 @@ document.addEventListener('DOMContentLoaded', () => {
         registerForm.parentElement.classList.add('hidden');
         loginForm.parentElement.classList.remove('hidden');
       });
-    
-      // Handle Login
       loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const email = loginForm.querySelector('input[type="email"]').value;
         const password = loginForm.querySelector('input[type="password"]').value;
-    
-        // Check for hardcoded admin
+ 
         if (email === "admin@quiz.com" && password === "admin123") {
-          window.location.assign( "dashboard.html");
+          localStorage.setItem('isAdmin', 'true');
+          window.location.assign("dashboard.html");
           return;
         }
-    
+  
         const users = JSON.parse(localStorage.getItem('users')) || [];
         const validUser = users.find(user => user.email === email && user.password === password);
-    
+      
         if (validUser) {
-          alert("Login successful!");
+          localStorage.setItem('currentUserEmail', email);
+          localStorage.setItem('isLoggedIn', 'true');
           window.location.assign("home.html");
         } else {
           alert("Invalid email or password.");
         }
-        if (username && email && password && confirmPassword && password === confirmPassword) {
-            // Simulate a successful registration
-            localStorage.setItem('isLoggedIn', 'true');
-            window.location.assign('home.html');  // Redirect to home page after registration
-          } else {
-            alert('Please fill out all fields and ensure passwords match');
-          }
       });
     });
   

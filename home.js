@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Set welcome message with username if available
     const welcomeMessage = document.getElementById('welcomeMessage');
-    const username = localStorage.getItem('username');
+    const username = localStorage.getItem('username')  || 
+    localStorage.getItem('currentUserEmail')?.split('@')[0];
     if (username) {
         welcomeMessage.textContent = `Welcome, ${username}!`;
     } else {
         welcomeMessage.textContent = 'Welcome!';
     }
 
-    // Display quizzes from localStorage
     displayQuizzes();
 
     function displayQuizzes() {
@@ -126,7 +126,6 @@ const quizzes = [
     }
   ];
   
-  // Save updated quizzes to localStorage
   localStorage.setItem("quizzes", JSON.stringify(quizzes));
   
   quizzes.forEach((quiz, index) => {
