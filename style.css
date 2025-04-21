@@ -19,11 +19,12 @@ body{
     background-position: center;
 }
 
+
 .login-box{
     position: relative;
     width: 400px;
     min-height: 500px;
-    background: transparent;
+    background:-moz-radial-gradient();
     border: 4px solid rgb(4, 4, 4);
     border-radius: 20px;
     display: flex;

@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Check for hardcoded admin
         if (email === "admin@quiz.com" && password === "admin123") {
-          window.location.href = "dashboard.html";
+          window.location.assign( "dashboard.html");
           return;
         }
     
@@ -67,11 +67,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
         if (validUser) {
           alert("Login successful!");
-          window.location.href = "quiz.html";
+          window.location.assign("home.html");
         } else {
           alert("Invalid email or password.");
         }
+        if (username && email && password && confirmPassword && password === confirmPassword) {
+            // Simulate a successful registration
+            localStorage.setItem('isLoggedIn', 'true');
+            window.location.assign('home.html');  // Redirect to home page after registration
+          } else {
+            alert('Please fill out all fields and ensure passwords match');
+          }
       });
     });
   
-
